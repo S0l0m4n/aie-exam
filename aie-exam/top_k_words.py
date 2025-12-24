@@ -3,7 +3,7 @@
 import argparse
 import string
 
-def get_k_most_tokens(text, k):
+def top_k_words(text, k):
     """
     Returns the k most common tokens in the given text, as a list in the form
     [(token1, n1), (token2, n2), ..., (tokenk, nk)]
@@ -69,4 +69,4 @@ if __name__ == '__main__':
         # interpret the arg as a simple string
         text = args.text
 
-    print(get_k_most_tokens(text, args.k))
+    print(top_k_words(text, args.k))
