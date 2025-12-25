@@ -5,38 +5,43 @@ import pdb
 
 def longest_unique_substring(s):
     """
-    Get the longest unique substring, with no unique characters in the given
+    Get the longest unique substring, with no repeated characters in the given
     string, O(n) speed
     """
-    substart = 0
-    substring = ''
+    current = ""
+    best = ""
+    last_seen = {}
 
-    for i in range(1, len(s)):
-        if s[i] == s[i-1]:
+    for i, ch in enumerate(s):
+        if ch in current:
             # repeated char, check if this new substring is longer
-            if len(s[substart:i]) > len(substring):
+            if len(current) > len(best):
                 # replace substring
-                substring = s[substart:i]
-
-            substart = i
-
-            if len(s[i:]) < len(substring):
-                # cannot find a longer substring, quit now
-                break
-
-    if len(s[substart:]) > len(substring):
+                best = current
+                if len(s[i:]) < len(best):
+                    # cannot find a longer substring, quit now
+                    break
+            # start new substring attempt from next char after last seen
+            current = s[last_seen[ch]+1 : i+1]
+        else:
+            # accumulate the substring
+            current += ch
+        # track last seen
+        last_seen[ch] = i
+            
+    if len(current) > len(best):
         # last accumulated substring is longer
-        substring = s[substart:]
+        best = current
 
-    return substring
+    return best
 
 def test_longest_unique_substring():
-    assert longest_unique_substring("text") == "text"
-    assert longest_unique_substring("textt") == "text"
+    assert longest_unique_substring("text") == "tex"
+    assert longest_unique_substring("textt") == "tex"
     assert longest_unique_substring("aaaab") == "ab"
-    assert longest_unique_substring("aabccbcdef") == "cbcdef"
-    assert longest_unique_substring("aaaaabcbcdef") == "abcbcdef"
-    assert longest_unique_substring("aaaaabcbcdefdd") == "abcbcdefd"
+    assert longest_unique_substring("aabccbcdef") == "bcdef"
+    assert longest_unique_substring("aaaaabcbcdefa") == "bcdefa"
+    assert longest_unique_substring("aaaaabcbcdefdd") == "bcdef"
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
