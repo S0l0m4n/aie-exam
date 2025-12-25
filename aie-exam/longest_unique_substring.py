@@ -10,36 +10,33 @@ def longest_unique_substring(s):
     """
     substart = 0
     substring = ''
-    i = 1
 
-    while i < len(s):
+    for i in range(1, len(s)):
         if s[i] == s[i-1]:
             # repeated char, check if this new substring is longer
             if len(s[substart:i]) > len(substring):
                 # replace substring
                 substring = s[substart:i]
 
-            # skip ahead to the next unique character
-            for j in range(i+1, len(s)):
-                if s[j] == s[i]:
-                    # repeated char
-                    i += 1
-                else:
-                    break
-
             substart = i
 
             if len(s[i:]) < len(substring):
                 # cannot find a longer substring, quit now
                 break
-        # increment index in all cases
-        i += 1
 
     if len(s[substart:]) > len(substring):
         # last accumulated substring is longer
         substring = s[substart:]
 
     return substring
+
+def test_longest_unique_substring():
+    assert longest_unique_substring("text") == "text"
+    assert longest_unique_substring("textt") == "text"
+    assert longest_unique_substring("aaaab") == "ab"
+    assert longest_unique_substring("aabccbcdef") == "cbcdef"
+    assert longest_unique_substring("aaaaabcbcdef") == "abcbcdef"
+    assert longest_unique_substring("aaaaabcbcdefdd") == "abcbcdefd"
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
