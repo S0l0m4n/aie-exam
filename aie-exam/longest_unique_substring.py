@@ -8,32 +8,28 @@ def longest_unique_substring(s):
     Get the longest unique substring, with no repeated characters in the given
     string, O(n) speed
     """
-    current = ""
-    best = ""
+    start = 0
+    best_start = 0
+    best_len = 0
     last_seen = {}
 
     for i, ch in enumerate(s):
-        if ch in current:
-            # repeated char, check if this new substring is longer
-            if len(current) > len(best):
-                # replace substring
-                best = current
-                if len(s[i:]) < len(best):
-                    # cannot find a longer substring, quit now
-                    break
+        if ch in last_seen and last_seen[ch] >= start:
             # start new substring attempt from next char after last seen
-            current = s[last_seen[ch]+1 : i+1]
-        else:
-            # accumulate the substring
-            current += ch
-        # track last seen
-        last_seen[ch] = i
-            
-    if len(current) > len(best):
-        # last accumulated substring is longer
-        best = current
+            # ignore chars seen before start
+            start = last_seen[ch] + 1
 
-    return best
+        # update window and last seen
+        window_len = i - start + 1
+        last_seen[ch] = i
+
+        # update best
+        if window_len > best_len:
+                best_len = window_len
+                best_start = start
+
+    # return the best window
+    return s[best_start:best_start + best_len]
 
 def test_longest_unique_substring():
     assert longest_unique_substring("text") == "tex"
