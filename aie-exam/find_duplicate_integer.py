@@ -16,7 +16,7 @@ def find_duplicate_integer(integers):
     """
     S = sum(integers)
     n = len(integers) - 1
-    N = n*(n+1)/2.0
+    N = n*(n+1)//2      # do integer division (Python 3)
     x = int(S - N)
     
     try:
