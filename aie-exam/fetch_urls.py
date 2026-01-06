@@ -27,7 +27,7 @@ async def fetch_url(client, url) -> Optional[Any]:
     """
     try:
         resp = await client.head(url)
-        if "json" in resp.headers['Content-Type']:
+        if "json" in resp.headers.get('Content-Type', '').lower():
             # response is a JSON object
             resp = await client.get(url)
             print(f"✅ {url}: {resp.status_code}")
@@ -51,7 +51,9 @@ async def fetch_all():
             # use extend (not append) to keep the list flat
             results.extend(await asyncio.gather(*tasks))
 
-    print(results)
+    for count, r in enumerate(results, start=1):
+        if r is not None:
+            print(f"{count} - {r}")
 
 if __name__ == "__main__":
     asyncio.run(fetch_all())
