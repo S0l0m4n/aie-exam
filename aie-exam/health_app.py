@@ -15,10 +15,10 @@ class Sex(Enum):
 # health model
 class Health(BaseModel):
     name: str
-    age: Optional[int]
-    sex: Optional[Sex]
-    heart_rate: Optional[int]
-    vo2_max: Optional[int]
+    age: int | None = None
+    sex: Sex | None = None
+    heart_rate: int | None = None
+    vo2_max: int | None = None
 
 MY_HEALTH = Health(name='John Smith', age=23, sex=Sex.MALE, heart_rate=80,
         vo2_max=50)
@@ -31,16 +31,10 @@ def get_health():
 # POST: update all health stats
 @app.post("/health")
 def update_health(health: Health):
-    # name is required
-    MY_HEALTH.name = health.name
-    if health.age is not None:
-        MY_HEALTH.age = health.age
-    if health.sex is not None:
-        MY_HEALTH.sex = health.sex
-    if health.heart_rate is not None:
-        MY_HEALTH.heart_rate = health.heart_rate
-    if health.vo2_max is not None:
-        MY_HEALTH.vo2_max = health.vo2_max
+    health_fields = health.model_dump()
+    for k,v in health_fields.items():
+        # health object is not a dict, so we need to use setattr
+        setattr(MY_HEALTH, k, v)
     return {"message": "Updated info successfully", "health": MY_HEALTH}
 
 # POST: update heart rate
