@@ -1,6 +1,8 @@
 #!/bin/python3
 # A simple example demonstrating the use of FastAPI to create a server that
-# provides APIs for maintaining a book database
+# provides APIs for maintaining a book database.
+#
+# Run with: `$: uvicorn $(name):app --reload
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
