@@ -2,3 +2,5 @@
 */foo.txt
 */*.json
 */*.db
+*/*.csv
+*/*.zip
