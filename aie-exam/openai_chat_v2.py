@@ -3,9 +3,11 @@
 # Requests. Don't need to import the API key, this is done automatically by the
 # library.
 
+import os
 from openai import OpenAI
 from openai.types.responses.response import Response
 
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 MODEL = "gpt-4o-mini"
 
 body = {
@@ -14,7 +16,7 @@ body = {
         "max_output_tokens": 150,
 }
 
-client = OpenAI()
+client = OpenAI(api_key=OPENAI_API_KEY) # don't need to specify key explicitly
 
 def get_output_text(response:Response) -> str:
     """
